@@ -26,6 +26,15 @@ export function validateTags(tags) {
   return null;
 }
 
+// `values` is url.searchParams.getAll('tag'). Repeats are checked before the value (D-9, D-8).
+export function validateTagFilter(values) {
+  if (values.length > 1) return 'only one tag filter is allowed';
+  if (values.length === 1 && !TAG_PATTERN.test(lowerAscii(values[0]))) {
+    return 'tag must be 1-20 characters of a-z, 0-9 and -';
+  }
+  return null;
+}
+
 export function validateNoteInput(input) {
   if (!input || typeof input !== 'object') return 'body must be a JSON object';
   if (typeof input.title !== 'string' || input.title.trim() === '') return 'title is required';

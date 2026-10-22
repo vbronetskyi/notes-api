@@ -137,3 +137,112 @@ test('AC-16 GET /notes/:id returns the tags from POST', async () => {
     await app.close();
   }
 });
+
+const ONE = 'only one tag filter is allowed';
+const getJson = async (app, path) => {
+  const res = await fetch(`${app.url}${path}`);
+  return { status: res.status, body: await res.json() };
+};
+
+test('AC-18 ?tag=work returns exactly the tagged notes in order', async () => {
+  const app = await start();
+  try {
+    const a = await (await post(app, { title: 'A', tags: ['work'] })).json();
+    await post(app, { title: 'B', tags: ['home'] });
+    const c = await (await post(app, { title: 'C', tags: ['home', 'work'] })).json();
+    for (const q of ['tag=work', 'tag=work&sort=x']) {
+      const r = await getJson(app, `/notes?${q}`);
+      assert.equal(r.status, 200);
+      assert.deepEqual(r.body, [a, c]);
+    }
+  } finally {
+    await app.close();
+  }
+});
+
+test('AC-19 ?tag= is lowercased before matching', async () => {
+  const app = await start();
+  try {
+    await post(app, { title: 'A', tags: ['work'] });
+    const expected = await getJson(app, '/notes?tag=work');
+    assert.equal(expected.body.length, 1);
+    for (const q of ['WORK', 'Work']) {
+      assert.deepEqual(await getJson(app, `/notes?tag=${q}`), expected);
+    }
+  } finally {
+    await app.close();
+  }
+});
+
+test('AC-20 ?tag= with no match returns []', async () => {
+  const app = await start();
+  try {
+    await post(app, { title: 'A', tags: ['work'] });
+    assert.deepEqual(await getJson(app, '/notes?tag=nothing'), { status: 200, body: [] });
+  } finally {
+    await app.close();
+  }
+});
+
+test('AC-21 invalid ?tag= value gets 400 with the tag-format message', async () => {
+  const app = await start();
+  try {
+    for (const v of ['', 'a+b', 'a%20b', 'a_b', 'a'.repeat(21), '%E2%84%AA']) {
+      assert.deepEqual(await getJson(app, `/notes?tag=${v}`), { status: 400, body: { error: FMT } }, v);
+    }
+  } finally {
+    await app.close();
+  }
+});
+
+test('AC-22 repeated tag parameter gets 400 only one tag filter', async () => {
+  const app = await start();
+  try {
+    for (const q of ['tag=a&tag=b', 'tag=a&tag=a', 'tag=&tag=a']) {
+      assert.deepEqual(await getJson(app, `/notes?${q}`), { status: 400, body: { error: ONE } }, q);
+    }
+  } finally {
+    await app.close();
+  }
+});
+
+test('AC-23 deleted note drops out of the tag filter', async () => {
+  const app = await start();
+  try {
+    const made = await (await post(app, { title: 'A', tags: ['work'] })).json();
+    assert.equal((await getJson(app, '/notes?tag=work')).body.length, 1);
+    assert.equal((await fetch(`${app.url}/notes/${made.id}`, { method: 'DELETE' })).status, 204);
+    assert.deepEqual(await getJson(app, '/notes?tag=work'), { status: 200, body: [] });
+  } finally {
+    await app.close();
+  }
+});
+
+test('AC-24 built-in property names behave like normal tags', async () => {
+  const app = await start();
+  try {
+    const made = await (await post(app, { title: 'A', tags: ['constructor'] })).json();
+    assert.deepEqual((await getJson(app, '/notes?tag=constructor')).body, [made]);
+    for (const v of ['tostring', 'hasownproperty']) {
+      assert.deepEqual(await getJson(app, `/notes?tag=${v}`), { status: 200, body: [] });
+    }
+  } finally {
+    await app.close();
+  }
+});
+
+test('D-11 tag query ignored on other routes', async () => {
+  const app = await start();
+  try {
+    const made = await (await post(app, { title: 'A', tags: ['a'] })).json();
+    const got = await fetch(`${app.url}/notes/${made.id}?tag=a&tag=b`);
+    assert.equal(got.status, 200);
+    assert.deepEqual(await got.json(), made);
+    const created = await fetch(`${app.url}/notes?tag=`, { method: 'POST', body: JSON.stringify({ title: 'B' }) });
+    assert.equal(created.status, 201);
+    const del = await fetch(`${app.url}/notes/${made.id}?tag=a_b`, { method: 'DELETE' });
+    assert.equal(del.status, 204);
+  } finally {
+    await app.close();
+  }
+});

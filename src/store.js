@@ -9,7 +9,8 @@ export function createNote({ title, body = '', tags = [] }) {
 }
 
 export const getNote = (id) => notes.get(id) ?? null;
-export const listNotes = () => [...notes.values()];
+export const listNotes = (tag) =>
+  [...notes.values()].filter((n) => tag === undefined || n.tags.includes(tag));
 export const deleteNote = (id) => notes.delete(id);
 
 export function resetStore() {

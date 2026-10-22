@@ -1,7 +1,7 @@
 // Request handler: routes, JSON in and out. Kept separate from the server so tests can
 // call it without opening a port.
 import { createNote, deleteNote, getNote, listNotes } from './store.js';
-import { normalizeTags, validateNoteInput } from './validate.js';
+import { lowerAscii, normalizeTags, validateNoteInput, validateTagFilter } from './validate.js';
 
 const json = (res, status, data) => {
   res.writeHead(status, { 'content-type': 'application/json' });
@@ -23,7 +23,13 @@ export async function handle(req, res) {
   const [, resource, id] = url.pathname.split('/');
   if (resource !== 'notes') return json(res, 404, { error: 'not found' });
 
-  if (req.method === 'GET' && !id) return json(res, 200, listNotes());
+  if (req.method === 'GET' && !id) {
+    const values = url.searchParams.getAll('tag');
+    if (values.length === 0) return json(res, 200, listNotes());
+    const error = validateTagFilter(values);
+    if (error) return json(res, 400, { error });
+    return json(res, 200, listNotes(lowerAscii(values[0])));
+  }
   if (req.method === 'GET' && id) {
     const note = getNote(id);
     return note ? json(res, 200, note) : json(res, 404, { error: 'note not found' });
