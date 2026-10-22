@@ -91,7 +91,7 @@ literals, not imported constants, so that a change to a message fails the tests.
     - AC-16: `GET /notes/:id` `tags` deep-equals the `tags` returned by `POST`.
   - Commit: `feat(notes): optional tags on POST /notes`
 
-- [ ] T3 Filter `GET /notes` by `?tag=` (validation, store and HTTP layers) → AC-18, AC-19, AC-20, AC-21, AC-22, AC-23, AC-24 → test/note-tags.test.js: "AC-18 …" through "AC-24 …" (one test per AC, names in the matrix), plus regression test "D-11 tag query ignored on other routes"
+- [x] T3 Filter `GET /notes` by `?tag=` (validation, store and HTTP layers) → AC-18, AC-19, AC-20, AC-21, AC-22, AC-23, AC-24 → test/note-tags.test.js: "AC-18 …" through "AC-24 …" (one test per AC, names in the matrix), plus regression test "D-11 tag query ignored on other routes"
   - Files: `src/validate.js` (`validateTagFilter`), `src/store.js` (`listNotes(tag?)`), `src/app.js` (read `getAll('tag')` on `GET /notes` only), `README.md` (document `?tag=`), `test/note-tags.test.js`.
   - Test inputs (minimum):
     - AC-18: notes A `["work"]`, B `["home"]` and C `["home","work"]`. `?tag=work` must return exactly `[A, C]` in creation order, and `?tag=work&sort=x` must return the same.
@@ -130,13 +130,13 @@ All tests are in `test/note-tags.test.js`.
 | AC-15 | T2 | "AC-15 rejected tags create no note" | 6073022 |
 | AC-16 | T2 | "AC-16 GET /notes/:id returns the tags from POST" | 6073022 |
 | AC-17 | T1 | "AC-17 GET /notes returns every note with a tags array" | 1e1c934 |
-| AC-18 | T3 | "AC-18 ?tag=work returns exactly the tagged notes in order" | |
-| AC-19 | T3 | "AC-19 ?tag= is lowercased before matching" | |
-| AC-20 | T3 | "AC-20 ?tag= with no match returns []" | |
-| AC-21 | T3 | "AC-21 invalid ?tag= value gets 400 with the tag-format message" | |
-| AC-22 | T3 | "AC-22 repeated tag parameter gets 400 only one tag filter" | |
-| AC-23 | T3 | "AC-23 deleted note drops out of the tag filter" | |
-| AC-24 | T3 | "AC-24 built-in property names behave like normal tags" | |
+| AC-18 | T3 | "AC-18 ?tag=work returns exactly the tagged notes in order" | 1cfe1af |
+| AC-19 | T3 | "AC-19 ?tag= is lowercased before matching" | 1cfe1af |
+| AC-20 | T3 | "AC-20 ?tag= with no match returns []" | 1cfe1af |
+| AC-21 | T3 | "AC-21 invalid ?tag= value gets 400 with the tag-format message" | 1cfe1af |
+| AC-22 | T3 | "AC-22 repeated tag parameter gets 400 only one tag filter" | 1cfe1af |
+| AC-23 | T3 | "AC-23 deleted note drops out of the tag filter" | 1cfe1af |
+| AC-24 | T3 | "AC-24 built-in property names behave like normal tags" | 1cfe1af |
 
 ## Risks
 
