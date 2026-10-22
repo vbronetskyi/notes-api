@@ -76,7 +76,7 @@ literals, not imported constants, so that a change to a message fails the tests.
   - The existing `test/notes.test.js` round-trip `deepEqual` must still pass unchanged.
   - Commit: `feat(notes): every note has a tags array`
 
-- [ ] T2 Accept, normalise and validate `tags` on `POST /notes` (validation layer plus wiring) → AC-2, AC-3, AC-4, AC-5, AC-6, AC-7, AC-8, AC-9, AC-10, AC-11, AC-12, AC-13, AC-14, AC-15, AC-16 → test/note-tags.test.js: "AC-2 …" through "AC-16 …" (one test per AC, names in the matrix)
+- [x] T2 Accept, normalise and validate `tags` on `POST /notes` (validation layer plus wiring) → AC-2, AC-3, AC-4, AC-5, AC-6, AC-7, AC-8, AC-9, AC-10, AC-11, AC-12, AC-13, AC-14, AC-15, AC-16 → test/note-tags.test.js: "AC-2 …" through "AC-16 …" (one test per AC, names in the matrix)
   - Files: `src/validate.js` (`lowerAscii`, `normalizeTags`, `validateTags`, constants, and the hook in `validateNoteInput`), `src/app.js` (pass `normalizeTags(input.tags ?? [])` to `createNote`), `README.md` (document `tags` on `POST /notes` and on the note shape), `test/note-tags.test.js`.
   - Test inputs (minimum):
     - AC-7: `["-", "x", "a".repeat(20)]`, plus `["--", "-a-"]`.
@@ -114,21 +114,21 @@ All tests are in `test/note-tags.test.js`.
 | AC | tasks | tests | commit |
 |---|---|---|---|
 | AC-1 | T1 | "AC-1 POST without tags returns tags []" | 1e1c934 |
-| AC-2 | T2 | "AC-2 POST with tags [] returns tags []" | |
-| AC-3 | T2 | "AC-3 valid tags are stored in order" | |
-| AC-4 | T2 | "AC-4 tags are lowercased" | |
-| AC-5 | T2 | "AC-5 duplicate tags after lowercasing are removed, first kept" | |
-| AC-6 | T2 | "AC-6 tag limit is counted after duplicates are removed" | |
-| AC-7 | T2 | "AC-7 boundary tags (1 char, hyphen-only, 20 chars) are accepted" | |
-| AC-8 | T2 | "AC-8 non-array tags (incl. null) get 400 tags must be an array" | |
-| AC-9 | T2 | "AC-9 non-string tag element gets 400 each tag must be a string" | |
-| AC-10 | T2 | "AC-10 malformed tag gets 400 with the tag-format message" | |
-| AC-11 | T2 | "AC-11 Kelvin sign is not lowercased to k and gets 400" | |
-| AC-12 | T2 | "AC-12 more than 5 distinct tags gets 400 at most 5 tags" | |
-| AC-13 | T2 | "AC-13 element error wins over count error" | |
-| AC-14 | T2 | "AC-14 title and body errors win over tag errors" | |
-| AC-15 | T2 | "AC-15 rejected tags create no note" | |
-| AC-16 | T2 | "AC-16 GET /notes/:id returns the tags from POST" | |
+| AC-2 | T2 | "AC-2 POST with tags [] returns tags []" | 6073022 |
+| AC-3 | T2 | "AC-3 valid tags are stored in order" | 6073022 |
+| AC-4 | T2 | "AC-4 tags are lowercased" | 6073022 |
+| AC-5 | T2 | "AC-5 duplicate tags after lowercasing are removed, first kept" | 6073022 |
+| AC-6 | T2 | "AC-6 tag limit is counted after duplicates are removed" | 6073022 |
+| AC-7 | T2 | "AC-7 boundary tags (1 char, hyphen-only, 20 chars) are accepted" | 6073022 |
+| AC-8 | T2 | "AC-8 non-array tags (incl. null) get 400 tags must be an array" | 6073022 |
+| AC-9 | T2 | "AC-9 non-string tag element gets 400 each tag must be a string" | 6073022 |
+| AC-10 | T2 | "AC-10 malformed tag gets 400 with the tag-format message" | 6073022 |
+| AC-11 | T2 | "AC-11 Kelvin sign is not lowercased to k and gets 400" | 6073022 |
+| AC-12 | T2 | "AC-12 more than 5 distinct tags gets 400 at most 5 tags" | 6073022 |
+| AC-13 | T2 | "AC-13 element error wins over count error" | 6073022 |
+| AC-14 | T2 | "AC-14 title and body errors win over tag errors" | 6073022 |
+| AC-15 | T2 | "AC-15 rejected tags create no note" | 6073022 |
+| AC-16 | T2 | "AC-16 GET /notes/:id returns the tags from POST" | 6073022 |
 | AC-17 | T1 | "AC-17 GET /notes returns every note with a tags array" | 1e1c934 |
 | AC-18 | T3 | "AC-18 ?tag=work returns exactly the tagged notes in order" | |
 | AC-19 | T3 | "AC-19 ?tag= is lowercased before matching" | |
