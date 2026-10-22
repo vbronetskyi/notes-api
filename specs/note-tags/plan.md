@@ -70,7 +70,7 @@ in a new file, `test/note-tags.test.js`. It runs over real HTTP through `start()
 Every test name starts with the AC IDs it proves. Tests assert the exact D-7 strings as
 literals, not imported constants, so that a change to a message fails the tests.
 
-- [ ] T1 Every note carries `tags` (store layer): `createNote` defaults `tags` to `[]` and every response includes it → AC-1, AC-17 → test/note-tags.test.js: "AC-1 POST without tags returns tags []", "AC-17 GET /notes returns every note with a tags array"
+- [x] T1 Every note carries `tags` (store layer): `createNote` defaults `tags` to `[]` and every response includes it → AC-1, AC-17 → test/note-tags.test.js: "AC-1 POST without tags returns tags []", "AC-17 GET /notes returns every note with a tags array"
   - Files: `src/store.js` (the `tags = []` default, and the shape comment), `test/note-tags.test.js` (new).
   - The AC-17 test creates 2 notes and asserts the list length is 2 and that `Array.isArray(n.tags)` holds for each note.
   - The existing `test/notes.test.js` round-trip `deepEqual` must still pass unchanged.
@@ -113,7 +113,7 @@ All tests are in `test/note-tags.test.js`.
 
 | AC | tasks | tests | commit |
 |---|---|---|---|
-| AC-1 | T1 | "AC-1 POST without tags returns tags []" | |
+| AC-1 | T1 | "AC-1 POST without tags returns tags []" | 1e1c934 |
 | AC-2 | T2 | "AC-2 POST with tags [] returns tags []" | |
 | AC-3 | T2 | "AC-3 valid tags are stored in order" | |
 | AC-4 | T2 | "AC-4 tags are lowercased" | |
@@ -129,7 +129,7 @@ All tests are in `test/note-tags.test.js`.
 | AC-14 | T2 | "AC-14 title and body errors win over tag errors" | |
 | AC-15 | T2 | "AC-15 rejected tags create no note" | |
 | AC-16 | T2 | "AC-16 GET /notes/:id returns the tags from POST" | |
-| AC-17 | T1 | "AC-17 GET /notes returns every note with a tags array" | |
+| AC-17 | T1 | "AC-17 GET /notes returns every note with a tags array" | 1e1c934 |
 | AC-18 | T3 | "AC-18 ?tag=work returns exactly the tagged notes in order" | |
 | AC-19 | T3 | "AC-19 ?tag= is lowercased before matching" | |
 | AC-20 | T3 | "AC-20 ?tag= with no match returns []" | |
