@@ -1,0 +1,14 @@
+{
+  "name": "notes-api",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A tiny notes HTTP API on node:http, no dependencies. Used to try the team-ai-marketplace plugins outside DevDigest.",
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test 'test/*.test.js'",
+    "check": "for f in src/*.js; do node --check \"$f\" || exit 1; done && node --test 'test/*.test.js'"
+  },
+  "license": "MIT"
+}
