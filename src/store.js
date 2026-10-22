@@ -1,9 +1,9 @@
-// In-memory note store. A note is { id, title, body, createdAt }.
+// In-memory note store. A note is { id, title, body, createdAt, tags }.
 let nextId = 1;
 const notes = new Map();
 
-export function createNote({ title, body = '' }) {
-  const note = { id: String(nextId++), title, body, createdAt: new Date().toISOString() };
+export function createNote({ title, body = '', tags = [] }) {
+  const note = { id: String(nextId++), title, body, createdAt: new Date().toISOString(), tags };
   notes.set(note.id, note);
   return note;
 }
