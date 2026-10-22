@@ -1,0 +1,17 @@
+{
+  "extraKnownMarketplaces": {
+    "team-ai-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "vbronetskyi/team-ai-marketplace"
+      },
+      "autoUpdate": true
+    }
+  },
+  "enabledPlugins": {
+    "sdd-engineering@team-ai-marketplace": true,
+    "engineering-paved-path@team-ai-marketplace": true,
+    "research-tools@team-ai-marketplace": true,
+    "architecture-review@team-ai-marketplace": true
+  }
+}
